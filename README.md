@@ -138,11 +138,6 @@ CUDA_VISIBLE_DEVICES=0 python train.py --train False --pred_method 0 --num_train
 and can run the following command to conduct cross genomic region prediction
 ```shell
 CUDA_VISIBLE_DEVICES=0 python train.py --train False --pred_method 1 --num_train_region 10000 --cell_idxs_path test_cell_type_idxs.npy --pretrained_model_path checkpoint/best_model.ckpt
-[train]  --  whethre use train mode
-[pred_method] -- Method for testing the model, 0 for cross cell type prediction, 1 for cross genomic region prediction and 2 for cross both prediction
-[num_train_region]  --  number of genomic regions used for training
-[cell_idxs_path] -- indexes of cell types used for training
-[pretrained_model_path] -- path for the pretrained EpiGePT model
 ```
 
 
