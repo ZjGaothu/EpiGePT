@@ -1,7 +1,7 @@
 # EpiGePT
 
 <div align=center>
-<img src = "init/model.jpg",width='200%'>
+<img src = "init/model.jpg" ,width='80%'>
 </div>  
 
 
