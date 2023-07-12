@@ -1,7 +1,7 @@
 # EpiGePT
 
 <div align=center>
-<img src = "inst/model.jpg">
+<img src = "init/model.jpg">
 </div>  
 
 
