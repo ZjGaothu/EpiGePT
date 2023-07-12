@@ -15,8 +15,10 @@ EpiGePT is a transformer-based model for cross-cell-line prediction of chromatin
   - [Requirements](#requirements)
   - [Install](#install)
   - [Reproduction](#reproduction)
+    - [Data downloading](#data-downloading)
+    - [Data preprocessing](#data-preprocessing)
     - [Model training](#model-training)
-    - [Model predicting](#model-predicting)
+    - [Model testing](#model-testing)
     - [Pretrain Models](#pretrain-models)
   - [Contact](#contact)
   - [Citation](#citation)
@@ -24,8 +26,10 @@ EpiGePT is a transformer-based model for cross-cell-line prediction of chromatin
 
 ## Requirements
 
-- TensorFlow==1.13.1
-- Python==2.7.1
+- Pytorch-lightning==1.2.10 
+- Pytorch==1.7.1
+- Python==3.6.9
+- Pyfasta==0.5.2
 
 
 ## Install
@@ -34,87 +38,131 @@ EpiGePT can be downloaded by
 ```shell
 git clone https://github.com/ZjGaothu/EpiGePT
 ```
-Software has been tested on a Linux (Centos 7) and Python environment. A GPU card is recommended for accelerating the training process.
+Software has been tested on a Linux and Python 3.6 environment. A GPU card is recommended for accelerating the training process.
 
 ## Reproduction
 
 This section provides instructions on how to reproduce results in the original paper.
 
-### Model training
+### Data downloading
 
-We trained 
+We provided `Download_raw_data.sh` for download RNA-seq data (.tsv), DNase-seq data (.bam) and ChIP-seq data (.bam) from the ENCODE project
+We pre-defined cell type ID from 1-37. After downloading the meta data from ENCODE website (`head -n 1 files.txt|xargs -L 1 curl -O -L`), one can run the following script:
 
-The main python script `main_density_est.py` is used for implementing Roundtrip. Model architecture for Roundtrip can be find in `model.py`. Data loader or data sampler can be find in `util.py`.
+```python
+bash Download_raw_data.bash  -c <CELL_ID> -r -c -d
+-c  CELLID: pre-defined cell ID (from 1 to 55)
+-r  download RNA-seq data (.tsv)
+-d  download chromatin accessible readscount from DNase-seq data (.bam)
+-c  download readscount from ChIP-seq data (.bam)
+```
+one can also run ```bash Download_raw_data.bash  -h``` to show the script instructions. Note that `.bam` files downloading may take time. After downloading the raw data, the raw data folder will be organized by `cell-assay-experiment-file` order. Note that each experiment may contain multiple replicates. See an example of the folder tree:
 
-Taking the (1) for an example, one can run the following commond to train a Roundtrip model with indepedent Gaussian mixture data.
+```
+data/
+    |-- raw_data/
+    |   |-- 1/
+    |   |   |-- dseq/
+    |   |   |   |-- ENCSR000EIE/
+    |   |   |   |   |-- ENCFF953HEA.bed.gz
+    |   |   |   |   |-- ENCFF983PML.bam
+    |   |   |   |-- ENCSR000ELW/
+    |   |   |   |   |...
+    |   |   |-- rseq/
+    |   |   |   |-- ENCSR000BXY/
+    |   |   |   |   |-- ENCFF110IED.tsv
+    |   |   |   |   |-- ENCFF219FVQ.tsv
+    |   |   |   |-- ENCSR000BYH/
+    |   |   |   |   |...
+```
+
+### Data preprocessing
+
+After downloading the raw DNase-seq, RNA-seq and ChIP-seq data, you can align BAM files to the reference sequence to obtain read counts. Users can use the following command for alignment:
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 python main_density_est.py  --dx 2 --dy 2 --train True --data indep_gmm --epochs 100 --cv_epoch 30 --patience 5
-[dx]  --  dimension of latent space
-[dy]  --  dimension of observation space
-[train]  --  whethre use train mode
-[data]  --  dataset name
-[epochs] -- maximum training epoches
-[cv_epoch] -- epoch where (cross) validation begins
-[patience] -- patience for early stopping
+bash runme.sh
 ```
-After training the model, you will have three part of outputs, which are marked by a unique timestamp `YYYYMMDD_HHMMSS`. This timestamp records the exact time when you run the script.
 
- 1) `log` files and estimated density can be found at folder `data/density_est_YYYYMMDD_HHMMSS_indep_gmm_x_dim=2_y_dim=2_alpha=10.0_beta=10.0`.
- 
- 2) Model weights will be saved at folder `checkpoint/density_est_YYYYMMDD_HHMMSS_indep_gmm_x_dim=2_y_dim=2_alpha=10.0_beta=10.0`. 
- 
- 3) The training loss curves were recorded at folder `graph/density_est_YYYYMMDD_HHMMSS_indep_gmm_x_dim=2_y_dim=2_alpha=10.0_beta=10.0`, which can be visualized using TensorBoard.
+Then we merge multiple replicate of RNA-seq data by taking the average expression of each gene across replicates in a cell type. As for DNase-seq data and ChIP-seq data, we only keep bins that appear in more than half of the replicates with respect to a cell type. One can run the following scripts to merge relicates of both DNase-seq, ChIP-seq and RNA-seq data, and generate TF gene expression matrix (N x C where N is the number of TFs and C is the number of cell types).
 
- Next, we want to visulize the estimated density on a 2D region. One can then run the following script. 
+Additionally, users can also obtain the motif binding score of motifscan results by homer tool.
 
- ```shell
- CUDA_VISIBLE_DEVICES=0 python evaluate.py --data indep_gmm --epoch epoch --path path
- [YYYYMMDD_HHMMSS] --  timestamp in the last training step
- [epoch] -- epoch for loading model weights
- [path] --path to data folder, e.g., `data/density_est_YYYYMMDD_HHMMSS_indep_gmm_x_dim=2_y_dim=2_alpha=10.0_beta=10.0`
- ```
+```shell
+python preprocess.py
+```
 
- we suggest to use the epoch recorded in the last line of the `log_test.txt` file in the output part 1). Then the estimated density (.png) on a 2D grid region will be saved in the same data folder `data/density_est_YYYYMMDD_HHMMSS_indep_gmm_x_dim=2_y_dim=2_alpha=10.0_beta=10.0`. 
+As for the motif binding score, we conducted scanning of 711 transcription factors across the entire genome and integrated them into the [EpiGePT-online](http://health.tsinghua.edu.cn/epigept/) platform, enabling users to directly perform predictions through the web interface. 
 
- It also easy to implement Roundtrip with other two simulation datasets by changing the `data`.
 
-- 8-octagon Gaussian mixture
-    Model training:
-    ```shell
-    CUDA_VISIBLE_DEVICES=0 python main_density_est.py  --dx 2 --dy 2 --train True --data eight_octagon_gmm --epochs 300 --cv_epoch 200 --patience 5
-    ```
-    Density esitmation on a 2D grid region:
-    ```shell
-    CUDA_VISIBLE_DEVICES=0 python evaluate.py --data eight_octagon_gmm --epoch epoch --path path
-    ```
-- involute
-    Model training:
-    ```shell
-    CUDA_VISIBLE_DEVICES=0 python main_density_est.py  --dx 2 --dy 2 --train True --data involute --epochs 300 --cv_epoch 200 --patience 5
-    ```
-    Density esitmation on a 2D grid region:
-    ```shell
-    CUDA_VISIBLE_DEVICES=0 python evaluate.py  --data involute --epoch epoch --path path
-    ```
+### Model training
 
-### Model predicting
 
-Next, we tested Roundtrip on different types of real data including five datasets from UCI machine learning repository and two image datasets. We provided freely public access to all related datasets (UCI datasets, image datasets, and OODS datasets), which can be download from a [zenodo repository](https://doi.org/10.5281/zenodo.3747144). All you need is to download the corresponding dataset (e.g., `AreM.tar.gz`), uncompress the data under `datasets` folder. Please also note that we provided various of pretrain models for a quick implementation of Roundtrip without training (see pretrain models section).
+The main python script `train.py` is used for implementing EpiGePT for predicting 8 epigenomic profiles. Model architecture for EpiGePT can be find in `./model/EpiGePT.py`. Data loader or data sampler can be find in `./model/dataset.py`.
+
+One can run the following commond to train a EpiGePT model, the preprocessed data of TF expression value can be downloaded from the `Supplementary Materials` of EpiGePT.
+
+```shell
+CUDA_VISIBLE_DEVICES=0 python train.py --train True  --num_train_region 10000 --cell_idxs_path train_cell_type_idxs.npy
+[train]  --  whethre use train mode
+[num_train_region]  --  number of genomic regions used for training
+[cell_idxs_path] -- indexes of cell types used for training
+```
 
 
 
 
+ Next, users can also train a EpiGePT model specially for the prediction of the chromatin accessibility (DNase-seq) by running the following commond.
+
+
+```shell
+CUDA_VISIBLE_DEVICES=0 python train_DNase.py --train True --cell_idxs_path train_cell_type_idxs.npy
+[train]  --  whethre use train mode
+[cell_idxs_path] -- indexes of cell types used for training
+```
+
+
+### Model testing
+
+For model prediction, we provide three different approaches. Given that EpiGePT allows prediction of epigenomic signal values in any specified genomic region and cell type, we employed three testing approaches to evaluate model performance within the collected 28 cell types: `cross-cell-type`, `cross-region`, and `cross-both`. one can run the following command to conduct cross cell type prediction
+
+```shell
+CUDA_VISIBLE_DEVICES=0 python train.py --train False --pred_method 0 --num_train_region 10000 --cell_idxs_path train_cell_type_idxs.npy --pretrained_model_path checkpoint/best_model.ckpt
+[train]  --  whethre use train mode
+[pred_method] -- Method for testing the model, 0 for cross cell type prediction, 1 for cross genomic region prediction and 2 for cross both prediction
+[num_train_region]  --  number of genomic regions used for training
+[cell_idxs_path] -- indexes of cell types used for training
+[pretrained_model_path] -- path for the pretrained EpiGePT model
+```
+
+and can run the following command to conduct cross genomic region prediction
+```shell
+CUDA_VISIBLE_DEVICES=0 python train.py --train False --pred_method 1 --num_train_region 10000 --cell_idxs_path test_cell_type_idxs.npy --pretrained_model_path checkpoint/best_model.ckpt
+[train]  --  whethre use train mode
+[pred_method] -- Method for testing the model, 0 for cross cell type prediction, 1 for cross genomic region prediction and 2 for cross both prediction
+[num_train_region]  --  number of genomic regions used for training
+[cell_idxs_path] -- indexes of cell types used for training
+[pretrained_model_path] -- path for the pretrained EpiGePT model
+```
+
+
+Similarly, we provide separate scripts for cross-cell type prediction of DNase, allowing users to predict DNase-seq signals across the entire genome in specified test cell types among the 129 available cell types using the following script.
+
+```shell
+CUDA_VISIBLE_DEVICES=0 python train_DNase.py --train False --cell_idxs_path test_cell_type_idxs.npy --pretrained_model_path checkpoint/best_model.ckpt
+[train]  --  whethre use train mode
+[cell_idxs_path] -- indexes of cell types used for training
+[pretrained_model_path] -- path for the pretrained EpiGePT model
+```
 
 ### Pretrain Models
 
-We provide various of pretrain models for a quick implementation of Roundtrip. First, one needs to download the pretrain models `pre_trained_models.tar.gz` from [zenodo repository](https://doi.org/10.5281/zenodo.3747144). Then uncompress it under `Roundtrip` folder. For the above models that use `evaluate.py` for model evaluation. One can simply add `--pretrain True` to the end of each evaluation command. For an example, one can run 
+We provide various of pretrain models for a quick implementation of EpiGePT. First, one needs to download the pretrain models from the [EpiGePT-online](`pre_trained_models.tar.gz`) website. Then uncompress it under `EpiGePT` folder. For the above models that use `predict.py` for model prediction. For an example, one can run 
 
 ```python
-python evaluate.py --data mnist --path path --pretrain True
+python predict.py  --pretrained_model_path checkpoint/pretrain_model.ckpt
 ```
 
-This can implement the Beyes posterior probability estimation, which will result in around 98.3% classification accuracy. Note that in pretrain evaluation, the `path` parameter can be any fold path like `density_est_YYYYMMDD_HHMMSS_mnist_x_dim=100_y_dim=784_alpha=10.0_beta=10.0`. `path` name is necessary as it is used for parsing parameters in `evaluate.py`. 
 
 
 

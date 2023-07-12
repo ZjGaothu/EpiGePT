@@ -46,7 +46,8 @@ def main(hparams):
         """
         cross cell region prediction on the same genomic regions
         """
-        for i in range(len(test_idx)):
+        train_idx = np.load(hparams.cell_idxs_path)
+        for i in range(len(train_idx)):
             predicted_proba = []
             true_label = []
             print('cell index ' + str(train_idx[i]) )
@@ -93,8 +94,8 @@ if __name__ == "__main__":
     parser.add_argument("--seed", type=int, default=42, help="Reproduction")
     parser.add_argument('--gpus', type=int, default=1, help="How many gpus")
     parser.add_argument("--pred_method", type=int, default=0, help="Reproduction")
-    parser.add_argument('--pretrain_model_path', type=str, default='./checkpoint/best_model.pt',help="path of the pretrained-model")
-    parser.add_argument('--save_model_path', type=str, default='./checkpoint',help="path to save the model")
+    parser.add_argument('--pretrain_model_path', type=str, default='./checkpoint/pretrain_model.ckpt',help="path of the pretrained-model")
+    parser.add_argument('--save_model_path', type=str, default='checkpoint',help="path to save the model")
     parser.add_argument('--cell_idxs_path', type=str, default='test_cell_type_idxs.npy',help="path to the indexs of the subset of the cell types")
     parser.add_argument('--pred_path', type=str, default='checkpoint',help="path to the indexs of the subset of the cell types")
     parser.add_argument("--num_train_region", type=int, default=10000, help="number of training genomic regions")

@@ -42,7 +42,7 @@ def main(hparams):
             predicted_proba = []
             true_label = []
             print('cell index ' + str(test_idx[i]) )
-            test_data_loader = torch.utils.data.DataLoader(dataset.GenomicData(np.array([test_idx[i]],'data'),hparams.num_train_region),batch_size=BATCH_SIZE, shuffle=False,num_workers=16)
+            test_data_loader = torch.utils.data.DataLoader(dataset.GenomicData(np.array([test_idx[i]],'data')),batch_size=BATCH_SIZE, shuffle=False,num_workers=16)
             for inputs,tf_feats,labels in test_data_loader:
                 pre_batch = model(inputs,tf_feats)
                 pre_batch = pre_batch.cpu.detach().numpy()
@@ -65,11 +65,11 @@ def main(hparams):
         model.load_state_dict(torch.load(hparams.pretrained_model_path,map_location='cuda:0')['state_dict'])
         model.eval()
         model.cuda()
-        for i in range(len(test_idx)):
+        for i in range(len(train_idx)):
             predicted_proba = []
             true_label = []
             print('cell index ' + str(train_idx[i]) )
-            test_data_loader = torch.utils.data.DataLoader(dataset.GenomicData(np.array([train_idx[i]],'data'),hparams.num_train_region,isTrain=False),batch_size=BATCH_SIZE, shuffle=False,num_workers=16)
+            test_data_loader = torch.utils.data.DataLoader(dataset.GenomicData(np.array([train_idx[i]],'data')),batch_size=BATCH_SIZE, shuffle=False,num_workers=16)
             for inputs,tf_feats,labels in test_data_loader:
                 pre_batch = model(inputs,tf_feats)
                 pre_batch = pre_batch.cpu.detach().numpy()
@@ -96,7 +96,7 @@ def main(hparams):
             predicted_proba = []
             true_label = []
             print('cell index ' + str(test_idx[i]) )
-            test_data_loader = torch.utils.data.DataLoader(dataset.GenomicData(np.array([test_idx[i]],'data'),hparams.num_train_region,isTrain=False),batch_size=BATCH_SIZE, shuffle=False,num_workers=16)
+            test_data_loader = torch.utils.data.DataLoader(dataset.GenomicData(np.array([test_idx[i]],'data')),batch_size=BATCH_SIZE, shuffle=False,num_workers=16)
             for inputs,tf_feats,labels in test_data_loader:
                 pre_batch = model(inputs,tf_feats)
                 pre_batch = pre_batch.cpu.detach().numpy()
@@ -123,6 +123,5 @@ if __name__ == "__main__":
     parser.add_argument('--save_model_path', type=str, default='./checkpoint',help="path to save the model")
     parser.add_argument('--cell_idxs_path', type=str, default='test_cell_type_idxs.npy',help="path to the indexs of the subset of the cell types")
     parser.add_argument('--pred_path', type=str, default='test_cell_type_idxs.npy',help="path to the indexs of the subset of the cell types")
-    parser.add_argument("--num_train_region", type=int, default=10000, help="number of training genomic regions")
     hparams = parser.parse_args()
     main(hparams)

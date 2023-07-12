@@ -64,7 +64,7 @@ def main(hparams):
         model.load_state_dict(torch.load(hparams.pretrained_model_path,map_location='cuda:0')['state_dict'])
         model.eval()
         model.cuda()
-        for i in range(len(test_idx)):
+        for i in range(len(train_idx)):
             predicted_proba = []
             true_label = []
             print('cell index ' + str(train_idx[i]) )
