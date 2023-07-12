@@ -56,6 +56,6 @@ function getReadsCount()
 #findMotifsGenome.pl data/motif/selected.$len.bin.homer.bed /home/users/liuqiao/work/hg19.fa data/motif/motifout_${len}_p$p -find data/motif/all_motif_rmdup_p$p.motif -p 32 -cache 250000 > data/motif/motifscan.$len.p$p.txt
 
 #/share/software/user/open/python/3.6.1/bin/python3 preprocess.py 
-~/anaconda3/condabin/conda activate geformer
-/home/users/liuqiao/anaconda3/envs/geformer/bin/python3.6 main.py
+#~/anaconda3/condabin/conda activate epigept
+#/home/users/liuqiao/anaconda3/envs/epigept/bin/python3.6 main.py
 #/share/software/user/open/python/3.6.1/bin/python3 main.py 
