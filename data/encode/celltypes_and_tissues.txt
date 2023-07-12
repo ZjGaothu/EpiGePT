@@ -1,0 +1,39 @@
+1	HepG2
+2	K562
+3	GM12878
+4	MCF-7
+5	H1
+6	HeLa-S3
+7	IMR-90
+8	HCT116
+9	SK-N-SH
+10	PC-3
+11	Panc1
+12	liver
+13	stomach
+14	heart
+15	spleen
+16	lung
+17	kidney
+18	adrenal gland
+19	sigmoid colon
+20	heart left ventricle
+21	upper lobe of left lung
+22	transverse colon
+23	gastrocnemius medialis
+24	ovary
+25	thyroid gland
+26	tibial nerve
+27	esophagus muscularis mucosa
+28	pancreas
+29	esophagus squamous epithelium
+30	body of pancreas
+31	testis
+32	breast epithelium
+33	uterus
+34	suprapubic skin
+35	prostate gland
+36	right atrium auricular region
+37	vagina
+38	ascending aorta
+39	thoracic aorta
