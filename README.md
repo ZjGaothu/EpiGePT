@@ -152,7 +152,7 @@ CUDA_VISIBLE_DEVICES=0 python train_DNase.py --train False --cell_idxs_path test
 
 ### Pretrain Models
 
-We provide various of pretrain models for a quick implementation of EpiGePT. First, one needs to download the pretrain models from the [EpiGePT-online]([http://health.tsinghua.edu.cn/epigept/help/pretrain_models.tar.gz](http://health.tsinghua.edu.cn/epigept/about.php)) website. Then uncompress it under `EpiGePT` folder. For the above models that use `predict.py` for model prediction. For an example, one can run 
+We provide various of pretrain models for a quick implementation of EpiGePT. First, one needs to download the pretrain models from the [EpiGePT-online](http://health.tsinghua.edu.cn/epigept/about.php) website. Then uncompress it under `EpiGePT` folder. For the above models that use `predict.py` for model prediction. For an example, one can run 
 
 ```python
 python predict.py  --pretrained_model_path checkpoint/pretrain_model.ckpt
