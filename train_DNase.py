@@ -17,8 +17,9 @@ from model import EpiGePT,dataset,EpiGePT_DNase
 
 def main(hparams):
     pl.seed_everything(hparams.seed)
+    fold_idx = hparams.fold_idx
     if hparams.train:
-        model = EpiGePT_DNase.EpiGePT_DNase(WORD_NUM,SEQUENCE_DIM,TF_DIM,BATCH_SIZE,hparams.cell_idxs_path)
+        model = EpiGePT_DNase.EpiGePT_DNase(WORD_NUM,SEQUENCE_DIM,TF_DIM,BATCH_SIZE,hparams.cell_idxs_path,fold_idx)
         trainer = pl.Trainer(
             max_epochs=90,
             logger=pl_loggers.TensorBoardLogger(save_dir='logs',name='TensorBoard',version=5),
@@ -122,6 +123,7 @@ if __name__ == "__main__":
     parser.add_argument('--gpus', type=int, default=1, help="How many gpus")
     parser.add_argument('--train', type=bool, default=True,help="train or load from pretrained model")
     parser.add_argument("--pred_method", type=int, default=0, help="Reproduction")
+    parser.add_argument("--fold_idx", type=int, default=0, help="Fold for cross validation during training")
     parser.add_argument('--pretrain_model_path', type=str, default='./checkpoint/best_model.pt',help="path of the pretrained-model")
     parser.add_argument('--save_model_path', type=str, default='./checkpoint',help="path to save the model")
     parser.add_argument('--cell_idxs_path', type=str, default='./data',help="path to the indexs of the subset of the cell types")
