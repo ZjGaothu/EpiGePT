@@ -198,7 +198,7 @@ class EpiGePT_pretrain(pl.LightningModule):
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(),lr = LEARNING_RATE)
     
-    def training_step(self,batch):
+    def training_step(self,batch,batch_idx):
         batch_encoder_embeds,batch_inputs_tf,targets = batch
         batch_pre = self.forward(batch_encoder_embeds,batch_inputs_tf)
         batch_pre = batch_pre.view(-1,NUM_SIGNALS)
@@ -206,7 +206,7 @@ class EpiGePT_pretrain(pl.LightningModule):
         loss_fn = nn.MSELoss(reduce=True, size_average=True)
         loss = loss_fn(batch_pre,targets)
         return loss
-    def validation_step(self,batch):
+    def validation_step(self,batch,batch_idx):
         batch_encoder_embeds, batch_inputs_tf,targets = batch
         batch_pre = self.forward(batch_encoder_embeds,batch_inputs_tf)
         batch_pre = batch_pre.view(-1, NUM_SIGNALS)
