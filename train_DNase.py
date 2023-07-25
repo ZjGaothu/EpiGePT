@@ -18,7 +18,7 @@ from model import EpiGePT,dataset,EpiGePT_DNase
 def main(hparams):
     pl.seed_everything(hparams.seed)
     if hparams.train:
-        model = EpiGePT_DNase.EpiGePT_DNase(WORD_NUM,SEQUENCE_DIM,TF_DIM,BATCH_SIZE)
+        model = EpiGePT_DNase.EpiGePT_DNase(WORD_NUM,SEQUENCE_DIM,TF_DIM,BATCH_SIZE,hparams.cell_idxs_path)
         trainer = pl.Trainer(
             max_epochs=90,
             logger=pl_loggers.TensorBoardLogger(save_dir='logs',name='TensorBoard',version=5),
