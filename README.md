@@ -103,7 +103,7 @@ The main python script `train.py` is used for implementing EpiGePT for predictin
 One can run the following commond to train a EpiGePT model, the preprocessed data of TF expression value can be downloaded from the `Supplementary Materials` of EpiGePT, the motif score file and target data for training used in the paper can be download from the Download page of [EpiGePT-online](http://health.tsinghua.edu.cn/epigept/download.php).
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 python train.py --train True  --num_train_region 10000 --cell_idxs_path train_cell_type_idxs.npy
+CUDA_VISIBLE_DEVICES=0 python train.py --train True  --num_train_region 10000 
 [train]  --  whethre use train mode
 [num_train_region]  --  number of genomic regions used for training
 [cell_idxs_path] -- indexes of cell types used for training
