@@ -26,8 +26,8 @@ def main(hparams):
             callbacks=[EarlyStopping(monitor='val_loss',mode='min',patience = 3)],
             checkpoint_callback=pl.callbacks.ModelCheckpoint(dirpath=hparams.save_model_path, verbose=True),
             default_root_dir=os.getcwd(),
-            distributed_backend='ddp',
-            gpus=[0,1,2,3])
+            # distributed_backend='ddp',
+            gpus=[0])
         trainer.fit(model)
     elif hparams.pred_method == 0:
         """
