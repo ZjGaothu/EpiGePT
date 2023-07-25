@@ -83,12 +83,14 @@ class EpiGePT_DNase(pl.LightningModule):
             tf_dim: dimension of the TF embedding.
             batch_size: batch size for training.
     """
-    def __init__(self, word_num,sequence_dim,tf_dim,batch_size):
+    def __init__(self, word_num,sequence_dim,tf_dim,batch_size,cell_idxs,fold_idx = 0):
         super().__init__()
         self.word_num = word_num
         self.sequence_dim = sequence_dim
         self.tf_dim = tf_dim
+        self.fold_idx = fold_idx
         self.batch_size = batch_size
+        self.cell_idxs = cell_idxs
         self.convmodule = Convmodule(CHANNEL_SIZE,SEQUENCE_DIM)
         self.config_encoder = BertConfig(vocab_size=word_num, hidden_size=SEQUENCE_DIM + TF_DIM,
                                             num_hidden_layers=NUM_LAYER,
@@ -129,13 +131,9 @@ class EpiGePT_DNase(pl.LightningModule):
 
 
     def setup(self,stage):
-        parser = argparse.ArgumentParser()
-        parser.add_argument("--path_train_cellidx", type=str, default='train_cell_type_idxs.npy', help="path to the indexs of the subset of the cell types")
-        parser.add_argument("--path_test_cellidx", type=str, default='test_cell_type_idxs.npy', help="path to the indexs of the subset of the cell types")
-        hparams = parser.parse_args()
-        fold_idx = 0
-        train_idx = np.load(hparams.path_train_cellidx,allow_pickle = True)[fold_idx]
-        test_idx = np.load(hparams.path_test_cellidx,allow_pickle = True)[fold_idx]
+        fold_idx = self.fold_idx
+        train_idx = np.load(self.cell_idxs+'./train_idx_5_fold.npy',allow_pickle = True)[fold_idx]
+        test_idx = np.array([item for item in np.arange(129) if item not in train_idx])
         dataset = GenomicData(train_idx,'data')
         train_size = int(0.9 * len(dataset))  
         np.random.seed(123)
