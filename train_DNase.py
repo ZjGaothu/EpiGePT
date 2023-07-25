@@ -34,7 +34,8 @@ def main(hparams):
         """
         model = EpiGePT_DNase.EpiGePT_DNase(WORD_NUM,SEQUENCE_DIM,TF_DIM,BATCH_SIZE)
         np.random.seed(123)
-        test_idx = np.load(hparams.cell_idxs_path)
+        cell_line_path = hparams.cell_idxs_path + '/test_cell_line_idxs.npy'
+        test_idx = np.load(cell_line_path)
         model.load_state_dict(torch.load(hparams.pretrained_model_path,map_location='cuda:0')['state_dict'])
         model.eval()
         model.cuda()
@@ -61,7 +62,8 @@ def main(hparams):
         """
         model = EpiGePT.EpiGePT(WORD_NUM,SEQUENCE_DIM,TF_DIM,BATCH_SIZE)
         np.random.seed(123)
-        train_idx = np.load(hparams.cell_idxs_path)
+        cell_line_path = hparams.cell_idxs_path + '/train_cell_line_idxs.npy'
+        train_idx = np.load(cell_line_path)
         model.load_state_dict(torch.load(hparams.pretrained_model_path,map_location='cuda:0')['state_dict'])
         model.eval()
         model.cuda()
@@ -88,7 +90,8 @@ def main(hparams):
         """
         model = EpiGePT.EpiGePT(WORD_NUM,SEQUENCE_DIM,TF_DIM,BATCH_SIZE)
         np.random.seed(123)
-        test_idx = np.load(hparams.cell_idxs_path)
+        cell_line_path = hparams.cell_idxs_path + '/test_cell_line_idxs.npy'
+        test_idx = np.load(cell_line_path)
         model.load_state_dict(torch.load(hparams.pretrained_model_path,map_location='cuda:0')['state_dict'])
         model.eval()
         model.cuda()
@@ -121,7 +124,7 @@ if __name__ == "__main__":
     parser.add_argument("--pred_method", type=int, default=0, help="Reproduction")
     parser.add_argument('--pretrain_model_path', type=str, default='./checkpoint/best_model.pt',help="path of the pretrained-model")
     parser.add_argument('--save_model_path', type=str, default='./checkpoint',help="path to save the model")
-    parser.add_argument('--cell_idxs_path', type=str, default='test_cell_type_idxs.npy',help="path to the indexs of the subset of the cell types")
+    parser.add_argument('--cell_idxs_path', type=str, default='./data',help="path to the indexs of the subset of the cell types")
     parser.add_argument('--pred_path', type=str, default='test_cell_type_idxs.npy',help="path to the indexs of the subset of the cell types")
     hparams = parser.parse_args()
     main(hparams)
