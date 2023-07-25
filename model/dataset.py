@@ -19,13 +19,13 @@ class GenomicData(Dataset):
         self.geno_path = path
         self.genome = Fasta('%s/genome.fa'%path)
         self.train_idx = train_idx
-        self.np_tf_bs = np.load('%s/motifscore_v2.npy'%path)
+        self.np_tf_bs = np.load('%s/motifscore.npy'%path)
         pd_tf_gexp = pd.read_csv('%s/aggregated_tf_expr.csv'%path,header=0,sep='\t',index_col=[0])
         pd_tf_gexp = pd_tf_gexp.T
         if quantile_norm:
             pd_tf_gexp = pd.DataFrame.transpose(self.quantile_norm_trans(pd.DataFrame.transpose(pd_tf_gexp)))
         self.pd_tf_gexp = np.log(pd_tf_gexp+1)
-        self.signals = np.load('%s/targets_data_v2.npy'%path)
+        self.signals = np.load('%s/targets_data.npy'%path)
         self.signals = np.log(self.signals + 1)
         self.regions = []
         with open("%s/overlap_count_gt50.128k.bin"%path, "rb") as file:
