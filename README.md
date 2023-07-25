@@ -171,7 +171,9 @@ Please feel free to open an issue in Github or directly contact `gzj21@mails.tsi
 
 If you find EpiGePT useful for your work, please consider citing our paper:
 
-**Zijing Gao**, **Qiao Liu**, Wanwen Zeng, Wing Hung Wong and Rui Jiang. EpiGePT: a Pretrained Transformer model for epigenomics
+[**Zijing Gao**, **Qiao Liu**, Wanwen Zeng, Wing Hung Wong and Rui Jiang. EpiGePT: a Pretrained Transformer model for epigenomics](https://www.biorxiv.org/content/10.1101/2023.07.15.549134v1)
+
+
 
 ## License
 
