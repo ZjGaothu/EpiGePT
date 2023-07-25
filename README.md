@@ -116,10 +116,12 @@ CUDA_VISIBLE_DEVICES=0 python train.py --train True  --num_train_region 10000
 
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 python train_DNase.py --train True --cell_idxs_path train_cell_type_idxs.npy
+CUDA_VISIBLE_DEVICES=0 python train_DNase.py --train True --cell_idxs_path data
 [train]  --  whethre use train mode
 [cell_idxs_path] -- indexes of cell types used for training
 ```
+
+Train cell type index file and test cell type index file can be found as [data/train_idxs_5_fold.npy](./data/train_idxs_5_fold.npy) and [data/test_idxs_5_fold.npy](./data/test_idxs_5_fold.npy).
 
 
 ### Model testing
