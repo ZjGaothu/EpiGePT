@@ -100,7 +100,7 @@ As for the motif binding score, we conducted scanning of 711 transcription facto
 
 The main python script `train.py` is used for implementing EpiGePT for predicting 8 epigenomic profiles. Model architecture for EpiGePT can be find in `./model/EpiGePT.py`. Data loader or data sampler can be find in `./model/dataset.py`.
 
-One can run the following commond to train a EpiGePT model, the preprocessed data of TF expression value can be downloaded from the `Supplementary Materials` of EpiGePT and the motif score file and target data for training used in the paper can be download from the Download page of [EpiGePT-online](http://health.tsinghua.edu.cn/epigept/download.php).
+One can run the following commond to train a EpiGePT model, the preprocessed data of TF expression value can be downloaded from the `Supplementary Materials` of EpiGePT, the motif score file and target data for training used in the paper can be download from the Download page of [EpiGePT-online](http://health.tsinghua.edu.cn/epigept/download.php).
 
 ```shell
 CUDA_VISIBLE_DEVICES=0 python train.py --train True  --num_train_region 10000 --cell_idxs_path train_cell_type_idxs.npy
