@@ -106,16 +106,19 @@ function downloadCseq()
         fmd5=$Cseq/$target/$exp/$facc.md5
         echo $furl >> ./ChIP_target.txt
         `
-        for ((i = 0; i < 5; i++)); do
-            if [[ ! -e $fmd5 || \`cat $fmd5\` != $msum ]]; then
-                mkdir -p \`dirname $fbed\`
-                printf "[Downloading] %s\t%s\t%s\t%s\n" $facc $furl $msum $exp
-                curl  -o $fbed -L $furl -C - -s
-                if [  -e $fbed ]; then
-                    md5sum $fbed | cut -d ' ' -f 1 > $fmd5
+         if [ $cellname == $CELL ]
+            then
+              for ((i = 0; i < 5; i++)); do
+                if [[ ! -e $fmd5 || \`cat $fmd5\` != $msum ]]; then
+                    mkdir -p \`dirname $fbed\`
+                    printf "[Downloading] %s\t%s\t%s\t%s\n" $facc $furl $msum $exp
+                    curl  -o $fbed -L $furl -C - -s
+                    if [  -e $fbed ]; then
+                        md5sum $fbed | cut -d ' ' -f 1 > $fmd5
+                    fi
                 fi
+            done  
             fi
-        done
         ` 
             #sleep 1s; while [ `ps -T | grep -P "\s+curl$" | wc -l` -ge 5 ]; do sleep 1s; done
         echo "${count} ChIP-seq .bam files download finished"
@@ -154,7 +157,7 @@ while read line; do
     echo $furl >> DNase_target1.txt
     echo $fbed >> path_target1.txt
     `
-    if [$cellname == $CELL]
+    if [ $cellname == $CELL ]
     then
       for ((i = 0; i < 5; i++)); do
         if [[ ! -e $fmd5 || \`cat $fmd5\` != $msum ]]; then
