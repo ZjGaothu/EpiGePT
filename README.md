@@ -92,7 +92,7 @@ Additionally, users can also obtain the motif binding score of motifscan results
 python preprocess.py
 ```
 
-As for the motif binding score, we conducted scanning of 711 transcription factors across the entire genome and integrated them into the [EpiGePT-online](http://health.tsinghua.edu.cn/epigept/) platform, enabling users to directly perform predictions through the web interface. 
+As for the motif binding score, we conducted scanning of 711 transcription factors across the entire genome and integrated them into the [EpiGePT-online](http://health.tsinghua.edu.cn/epigept/) platform, enabling users to directly perform predictions through the web interface. The file of genomic regions and samll demo data for motif score and target data can be found [here](data).
 
 
 ### Model training
