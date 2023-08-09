@@ -20,7 +20,7 @@ EpiGePT is a transformer-based model for cross-cell-line prediction of chromatin
     - [Model training](#model-training)
     - [Model testing](#model-testing)
     - [Pretrain Models](#pretrain-models)
-  - [Online-prediction](#Online-prediction)
+  - [Online-prediction](#online-prediction)
   - [Contact](#contact)
   - [Citation](#citation)
   - [License](#license)
