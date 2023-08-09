@@ -20,6 +20,7 @@ EpiGePT is a transformer-based model for cross-cell-line prediction of chromatin
     - [Model training](#model-training)
     - [Model testing](#model-testing)
     - [Pretrain Models](#pretrain-models)
+  - [Online-prediction](#Online-prediction)
   - [Contact](#contact)
   - [Citation](#citation)
   - [License](#license)
@@ -163,7 +164,7 @@ python predict.py  --pretrained_model_path checkpoint/pretrain_model.ckpt
 
 ## Online-prediction
 
-We also provide free online prediction service of EpiGePT through https://health.tsinghua.edu.cn/epigept/. Users can download an example input file for making predictions. The output of the website is a downloadable file that includes predicted scores for 8 epigenomic signals across the input genomic region divided into bins of 128bp each. Typically, predicting 10-50 regions of 128,000bp may take a few minutes. Users can provide their email addresses, and upon completion of the task, the results will be automatically sent to their email for download.
+We also provide free online prediction service of EpiGePT through https://health.tsinghua.edu.cn/epigept/. Users can download example input files for making predictions. The output of the website is a downloadable file that includes predicted scores for 8 epigenomic signals across the input genomic region divided into bins of 128bp each. Typically, predicting 10-50 regions of 128,000bp may take a few minutes. Users can provide their email addresses, and upon completion of the task, the results will be automatically sent to their email for download.
 
 
 ## Contact
