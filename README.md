@@ -121,7 +121,7 @@ CUDA_VISIBLE_DEVICES=0 python train_DNase.py --train True --cell_idxs_path data
 [cell_idxs_path] -- indexes of cell types used for training
 ```
 
-Train cell type index file and test cell type index file can be found as [data/train_idxs_5_fold.npy](./data/train_idxs_5_fold.npy) and [data/test_idxs_5_fold.npy](./data/test_idxs_5_fold.npy).
+Train cell type index file and test cell type index file can be found as [data/train_idxs_5_fold.npy](./data/train_idxs_5_fold.npy) and [data/test_idxs_5_fold.npy](./data/test_idxs_5_fold.npy). When training the DNase-specific pre-trained model with a batch size of 128, it takes approximately 2-3 hours to complete one epoch of training.
 
 
 ### Model testing
@@ -161,7 +161,9 @@ python predict.py  --pretrained_model_path checkpoint/pretrain_model.ckpt
 ```
 
 
+## Online-prediction
 
+We also provide free online prediction service of EpiGePT through https://health.tsinghua.edu.cn/epigept/. Users can download an example input file for making predictions. The output of the website is a downloadable file that includes predicted scores for 8 epigenomic signals across the input genomic region divided into bins of 128bp each. Typically, predicting 10-50 regions of 128,000bp may take a few minutes. Users can provide their email addresses, and upon completion of the task, the results will be automatically sent to their email for download.
 
 
 ## Contact
