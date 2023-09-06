@@ -7,6 +7,10 @@
 
 EpiGePT is a transformer-based model for cross-cell-line prediction of chromatin states by taking long DNA sequence and transcription factor profile as inputs. With EpiGePT, we can investigate the problem of how the trans-regulatory factors (e.g., TFs) regulate target gene by interacting with the cis-regulatory elements and further lead to the changes in chromatin states. Given the expression profile of hundreds of TFs from a cellular context, EpiGePT is able to predict the genome-wide chromatin states given the cellular context.
 
+## Updates
+
+- The processed training data for an hg38 version, containing 105 cell types of EpiGePT, has been uploaded to the [Download](http://health.tsinghua.edu.cn/epigept/download.php) page. In addition, a detailed tutorial on the usage of this model can be accessed [here]([insert tutorial link](http://health.tsinghua.edu.cn/epigept/tutorial.php)) (2023-09-05).
+
 
 ## Table of Contents
 
