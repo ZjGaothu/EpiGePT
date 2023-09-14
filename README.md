@@ -1,4 +1,4 @@
-# EpiGePT
+![image](https://github.com/ZjGaothu/EpiGePT/assets/48663858/9ac6078d-c07c-4731-a8e6-305939eda0c3)# EpiGePT
 
 <div align=center>
 <img src = "init/model.png" width=80% height=80%>
@@ -9,6 +9,7 @@ EpiGePT is a transformer-based model for cross-cell-line prediction of chromatin
 
 ## Updates
 
+- A simplest tutorial on how to running ineference using the pretrained EpiGePT model (hg38 version) has been uploaded to [here](https://github.com/ZjGaothu/EpiGePT/blob/main/tutorial_prediction_hg38.ipynb)
 - The processed training data for an hg38 version, containing 105 cell types of EpiGePT, has been uploaded to the [Download](http://health.tsinghua.edu.cn/epigept/download.php) page. In addition, a detailed tutorial on the usage of this model can be accessed [here](http://health.tsinghua.edu.cn/epigept/tutorial.php) (2023-09-05).
 
 
