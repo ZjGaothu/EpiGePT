@@ -46,6 +46,31 @@ git clone https://github.com/ZjGaothu/EpiGePT
 ```
 Software has been tested on a Linux and Python 3.6 environment. A GPU card is recommended for accelerating the training process.
 
+
+## Running inference
+
+This is a simplest tutorial on using the pre-trained EpiGePT model to predict epigenomic signals. As of September 2023, we have expanded the training data for EpiGePT to cover 105 cell types. All the data mentioned in this tutorial can be downloaded from the [Download](https://health.tsinghua.edu.cn/epigept/download.php) page. The purpose of this tutorial is to provide an example of how to use the pre-trained EpiGePT model to predict epigenomic signals for any genomic region and cell type. It's worth noting that this model has been updated to the hg38 reference genome.
+```python
+import torch
+import os
+from pyfasta import Fasta
+import numpy as np
+import pandas as pd
+os.environ['CUDA_VISIBLE_DEVICES']='5'
+from model_hg38 import EpiGePT
+from model_hg38.config import *
+from model_hg38.utils import *
+
+model = EpiGePT.EpiGePT(WORD_NUM,TF_DIM,BATCH_SIZE)
+model = load_weights(model,'pretrainModel/model.ckpt')
+
+SEQ_LENGTH = 128000
+input_tf_feature = np.random.rand(1000, 711) # 711 TFs
+input_seq_feature = np.zeros((1,4,SEQ_LENGTH))
+predict = model_predict(model,input_seq_feature,input_tf_feature)
+predict.shape # (BATCH_SIZE, Number of bins, Number of epigenomic profiles)
+# (1,1000,8)
+```
 ## Reproduction
 
 This section provides instructions on how to reproduce results in the original paper.
