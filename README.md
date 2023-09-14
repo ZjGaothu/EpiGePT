@@ -51,12 +51,7 @@ Software has been tested on a Linux and Python 3.6 environment. A GPU card is re
 
 This is a simplest tutorial on using the pre-trained EpiGePT model to predict epigenomic signals. As of September 2023, we have expanded the training data for EpiGePT to cover 105 cell types. All the data mentioned in this tutorial can be downloaded from the [Download](https://health.tsinghua.edu.cn/epigept/download.php) page. The purpose of this tutorial is to provide an example of how to use the pre-trained EpiGePT model to predict epigenomic signals for any genomic region and cell type. It's worth noting that this model has been updated to the hg38 reference genome.
 ```python
-import torch
-import os
-from pyfasta import Fasta
 import numpy as np
-import pandas as pd
-os.environ['CUDA_VISIBLE_DEVICES']='5'
 from model_hg38 import EpiGePT
 from model_hg38.config import *
 from model_hg38.utils import *
