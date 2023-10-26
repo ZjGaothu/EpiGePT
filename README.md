@@ -66,6 +66,9 @@ predict = model_predict(model,input_seq_feature,input_tf_feature)
 predict.shape # (BATCH_SIZE, Number of bins, Number of epigenomic profiles)
 # (1,1000,8)
 ```
+
+Users can prepare the tf expression, tf binding status, and sequence one-hot matrix in the above codes following the third section in detailed tutorial at the [Tutorial page](http://health.tsinghua.edu.cn/epigept/tutorial.php) on the online website.
+
 ## Reproduction
 
 This section provides instructions on how to reproduce results in the original paper.
