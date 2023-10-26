@@ -67,7 +67,7 @@ predict.shape # (BATCH_SIZE, Number of bins, Number of epigenomic profiles)
 # (1,1000,8)
 ```
 
-Users can prepare the tf expression, tf binding status, and sequence one-hot matrix in the above codes following the third section in detailed tutorial at the [Tutorial page](http://health.tsinghua.edu.cn/epigept/tutorial.php) on the online website.
+Users can prepare the tf expression, tf binding status, and sequence one-hot matrix in the above codes following the third section in detailed tutorial at the [Tutorial page](http://health.tsinghua.edu.cn/epigept/tutorial.php).
 
 ## Reproduction
 
