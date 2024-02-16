@@ -1,0 +1,105 @@
+1	A549
+2	A673
+3	AG04450
+4	BE2C
+5	BJ
+6	BLaER1
+7	Caco-2
+8	Calu3
+9	GM12878
+10	GM23248
+11	GM23338
+12	H1
+13	H7
+14	H9
+15	HCT116
+16	HeLa-S3
+17	HepG2
+18	HFFc6
+19	HUES64
+20	IMR-90
+21	Jurkat, Clone E6-1
+22	K562
+23	Karpas-422
+24	MCF 10A
+25	MCF-7
+26	MG63
+27	OCI-LY7
+28	Panc1
+29	PC-3
+30	PC-9
+31	SJCRH30
+32	SJSA1
+33	SK-N-SH
+34	UCSF-4
+35	WTC11
+36	adipose tissue
+37	adrenal gland
+38	amnion
+39	aorta
+40	ascending aorta
+41	body of pancreas
+42	brain
+43	breast epithelium
+44	cerebellum
+45	chorion
+46	chorionic villus
+47	colonic mucosa
+48	dorsolateral prefrontal cortex
+49	endocrine pancreas
+50	esophagus
+51	esophagus muscularis mucosa
+52	esophagus squamous epithelium
+53	gastrocnemius medialis
+54	gastroesophageal sphincter
+55	germinal matrix
+56	GM23338
+57	H1
+58	heart
+59	heart left ventricle
+60	heart right ventricle
+61	HFFc6
+62	kidney
+63	large intestine
+64	layer of hippocampus
+65	left lung
+66	left ventricle myocardium inferior
+67	liver
+68	lower leg skin
+69	lower lobe of left lung
+70	lower lobe of right lung
+71	lung
+72	mucosa of descending colon
+73	muscle of leg
+74	muscle of trunk
+75	omental fat pad
+76	ovary
+77	pancreas
+78	placenta
+79	placental basal plate
+80	prostate gland
+81	psoas muscle
+82	right atrium auricular region
+83	right cardiac atrium
+84	right lobe of liver
+85	sigmoid colon
+86	skeletal muscle tissue
+87	small intestine
+88	spinal cord
+89	spleen
+90	stomach
+91	subcutaneous adipose tissue
+92	suprapubic skin
+93	temporal lobe
+94	testis
+95	thoracic aorta
+96	thymus
+97	thyroid gland
+98	tibial nerve
+99	transverse colon
+100	trophoblast
+101	upper lobe of left lung
+102	upper lobe of right lung
+103	urinary bladder
+104	uterus
+105	vagina
