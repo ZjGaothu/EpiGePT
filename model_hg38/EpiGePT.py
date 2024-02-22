@@ -141,3 +141,18 @@ class EpiGePT(pl.LightningModule):
 
     def setup(self,stage):
         np.random.seed(123)
+        train_idx = np.load('../train_cells.npy')
+        test_idx = np.load('../test_cells.npy')
+        dataset = GenomicData(train_idx)
+        train_size = int(0.9 * len(dataset))  
+        np.random.seed(123)
+        self.dataset_train, self.dataset_val = torch.utils.data.random_split(dataset,
+                                            [train_size, len(dataset) - train_size])
+
+
+    def train_dataloader(self):
+        return DataLoader(self.dataset_train, batch_size=self.batch_size, shuffle=True, drop_last=False,num_workers=10)
+
+    def val_dataloader(self):
+        return DataLoader(self.dataset_val, batch_size=self.batch_size, num_workers=10)
+
