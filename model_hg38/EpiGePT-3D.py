@@ -19,7 +19,7 @@ from scipy.stats import pearsonr
 torch.backends.cudnn.deterministic = True
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 from model_hg38.config import *
-from dataset import GenomicData
+from dataset3d import GenomicData
 
 import torch
 import torch.nn as nn
@@ -110,32 +110,34 @@ class EpiGePT(pl.LightningModule):
         return torch.optim.Adam(self.parameters(),lr=LEARNING_RATE)
     
     def training_step(self,batch,batch_idx):
-        batch_encoder_embeds,batch_inputs_tf,targets,targets_mask = batch
-        batch_pre = self.forward(batch_encoder_embeds,batch_inputs_tf)
+        batch_encoder_embeds,batch_inputs_tf,targets,targets_mask,targets_attn,attn_mask = batch
+        batch_pre,attention_pre = self.forward(batch_encoder_embeds,batch_inputs_tf)
         batch_pre = batch_pre.view(-1,8)
         targets = targets.view(-1, 8)
-        
         targets_mask = targets_mask.view(-1, 8)
         batch_pre = batch_pre * targets_mask
         loss_fn = nn.MSELoss(reduction='sum')
         loss = loss_fn(batch_pre,targets)
         num_unmasked_elements = torch.sum(targets_mask)
-        loss = loss / num_unmasked_elements
+        loss = loss / (num_unmasked_elements+1e-8)
+        attention_similarity = F.cosine_similarity(attention_pre*attn_mask, targets_attn)
+        cosine_loss = -attention_similarity.mean()
+        loss = loss + 2*cosine_loss
         return loss
     def validation_step(self,batch,batch_idx):
-        batch_encoder_embeds, batch_inputs_tf,targets,targets_mask = batch
-        batch_pre = self.forward(batch_encoder_embeds,batch_inputs_tf)
+        batch_encoder_embeds, batch_inputs_tf,targets,targets_mask,targets_attn,attn_mask = batch
+        batch_pre,attention_pre = self.forward(batch_encoder_embeds,batch_inputs_tf)
         batch_pre = batch_pre.view(-1, 8)
         targets_mask = targets_mask.view(-1, 8)
         batch_pre = batch_pre * targets_mask
         loss_fn = nn.MSELoss(reduction='sum')
-
         targets = targets.view(-1,8)
         loss = loss_fn(batch_pre,targets)
         num_unmasked_elements = torch.sum(targets_mask)
-        loss = loss / num_unmasked_elements
-#         roc = roc_auc_score(targets.cpu().numpy(),batch_pre.cpu().numpy(),average='macro') 
-#         print('acc ',acc)
+        loss = loss / (num_unmasked_elements+1e-8)
+        attention_similarity = F.cosine_similarity(attention_pre*attn_mask, targets_attn)
+        cosine_loss = -attention_similarity.mean()
+        loss = loss + 2*cosine_loss
         self.log('val_loss', loss)
         
 

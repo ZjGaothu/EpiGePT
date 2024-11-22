@@ -83,9 +83,14 @@ class GenomicData(Dataset):
     def get_tf_state(self,region_idx,cellline_idx):
         tf_gexp_vec = self.pd_tf_gexp.loc[str(self.celllines[cellline_idx])].values 
         tf_gexp_feat = np.tile(tf_gexp_vec,(1000,1))
-
         tf_bs_feat = self.np_tf_bs[region_idx*1000:(region_idx+1)*1000]  
         return tf_bs_feat*tf_gexp_feat
+    
+    def get_attention(self,region_idx,cellline_idx):
+        target_attention = np.load('%s/data/hichip/p1e-3_count/%s/interaction_mat_cell_%s_region_%s_norm.npy'%(self.geno_path,self.train_idx[cellline_idx],self.train_idx[cellline_idx],region_idx))
+        attn_mask = (np.sum(target_attention,0) > 0).astype(int)
+        mask_mat = np.tile(attn_mask,(1000,1))
+        return target_attention,mask_mat
     
         
     def __getitem__(self, index):
@@ -94,24 +99,29 @@ class GenomicData(Dataset):
         seq = self.get_seq_from_meta(region_idx)
         seq_embeds = self.seq2mat(seq)
         tf_feats = self.get_tf_state(region_idx,cellline_idx)
-    
-
+        interaction,attn_mask = self.get_attention(region_idx,cellline_idx)
         targets_label,targets_mask = self.get_signals(region_idx,cellline_idx)
 
         tf_feats = np.pad(tf_feats,((0, 0), (0, 1)),'constant',constant_values = (0,0))
         tf_feats = np.array(tf_feats,dtype='float16')
         
-        seq_embeds = np.array(seq_embeds,dtype='float16')
+        seq_embeds = np.array(seq_embeds,dtype='float16')#(50,)
+        interaction = np.array(interaction,dtype='float16')
+        attn_mask = np.array(attn_mask,dtype='float16')
         seq_embeds = torch.from_numpy(seq_embeds)
         tf_feats = torch.from_numpy(tf_feats)
+        targets_attention = torch.from_numpy(interaction)
         targets_label = torch.from_numpy(targets_label)
         targets_mask = torch.from_numpy(targets_mask)
+        attn_mask = torch.from_numpy(attn_mask)
         
         seq_embeds = seq_embeds.type(torch.FloatTensor)
         tf_feats = tf_feats.type(torch.FloatTensor)
         targets_label = targets_label.type(torch.FloatTensor)
         targets_mask = targets_mask.type(torch.FloatTensor)
-        return (seq_embeds, tf_feats,targets_label,targets_mask)
+        targets_attention = targets_attention.type(torch.FloatTensor)
+        attn_mask = attn_mask.type(torch.FloatTensor)
+        return (seq_embeds, tf_feats,targets_label,targets_mask,targets_attention,attn_mask)
 
     def __len__(self):
         return len(self.celllines)*len(self.region_idx_subset)
