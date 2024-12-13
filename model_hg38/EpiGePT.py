@@ -120,7 +120,7 @@ class EpiGePT(pl.LightningModule):
         loss_fn = nn.MSELoss(reduction='sum')
         loss = loss_fn(batch_pre,targets)
         num_unmasked_elements = torch.sum(targets_mask)
-        loss = loss / num_unmasked_elements
+        loss = loss / (num_unmasked_elements+1e-8)
         return loss
     def validation_step(self,batch,batch_idx):
         batch_encoder_embeds, batch_inputs_tf,targets,targets_mask = batch
@@ -133,7 +133,7 @@ class EpiGePT(pl.LightningModule):
         targets = targets.view(-1,8)
         loss = loss_fn(batch_pre,targets)
         num_unmasked_elements = torch.sum(targets_mask)
-        loss = loss / num_unmasked_elements
+        loss = loss / (num_unmasked_elements+1e-8)
 #         roc = roc_auc_score(targets.cpu().numpy(),batch_pre.cpu().numpy(),average='macro') 
 #         print('acc ',acc)
         self.log('val_loss', loss)
